@@ -145,3 +145,25 @@ ggplot(weather_df, aes(x = tmin, y = tmax)) +
   theme_bw() +
   theme(legend.position = "bottom")
 ```
+
+Learning Assessment:
+
+```{r}
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = 0.75) +
+  geom_smooth(se = FALSE) +
+   labs(
+    title = "2017 Maximum Temperature Plot",
+    x = "Date",
+    y = "Maxiumum daily temperature (ºC)",
+    caption = "Data from the rnoaa package"
+  ) +
+    viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+
