@@ -105,7 +105,7 @@ Tidy is not always best for humans...
 weather_df %>% 
   group_by(name, month) %>% 
   summarize(mean_tmax = mean(tmax, na.rm = TRUE)) %>% 
-  spread(key = name, value = mean_tmax)
+  spread(key = name, value = mean_tmax) %>% 
   knitr::kable(digits = 3)
 ```
 
