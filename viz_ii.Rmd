@@ -177,3 +177,54 @@ ggplot(waikiki_df, aes(x = date, y = tmax, color = name)) +
 ```
 
 ## patchwork
+
+Where patchwork is not needed:
+
+```{r}
+ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = 0.75) +
+  geom_smooth(se = FALSE) +
+  facet_grid(~name) +
+   labs(
+    title = "2017 Maximum Temperature Plot",
+    x = "Date",
+    y = "Maxiumum daily temperature (ºC)",
+    caption = "Data from the rnoaa package"
+  ) +
+    viridis::scale_color_viridis(
+    name = "Location",
+    discrete = TRUE
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
+patchwork install:
+
+```{r}
+devtools::install_github("thomasp85/patchwork")
+library(patchwork)
+```
+
+Where patchwork is needed:
+
+```{r}
+tmax_tmin_p = ggplot(weather_df, aes(x = tmax, y = tmin, color = name)) + 
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+
+prcp_dens_p = weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) + 
+  geom_density(alpha = .5) + 
+  theme(legend.position = "none")
+
+tmax_date_p = ggplot(weather_df, aes(x = date, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  theme(legend.position = "bottom")
+
+tmax_tmin_p + prcp_dens_p
+(tmax_tmin_p + prcp_dens_p) / tmax_date_p
+```
+
