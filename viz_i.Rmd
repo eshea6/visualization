@@ -30,3 +30,36 @@ weather_df =
 weather_df
 ```
 
+## Start a plot
+
+Blank plot...
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax))
+```
+
+Scatterplot...
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+Amenable to piping:
+
+```{r}
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+Can also save plot:
+
+```{r}
+weather_sp =
+  ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+
