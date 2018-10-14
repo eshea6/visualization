@@ -724,6 +724,50 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
 </tr>
 </tbody>
 </table>
+<p>FAS Learning Assessment:</p>
+<pre class="r"><code>pup_data = read_csv(&quot;./data/FAS_pups.csv&quot;, col_types = &quot;ciiiii&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  mutate(sex = recode(sex, `1` = &quot;male&quot;, `2` = &quot;female&quot;)) 
+
+litter_data = read_csv(&quot;./data/FAS_litters.csv&quot;, col_types = &quot;ccddiiii&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  select(-pups_survive) %&gt;%
+  separate(group, into = c(&quot;dose&quot;, &quot;day_of_tx&quot;), sep = 3) %&gt;%
+  mutate(wt_gain = gd18_weight - gd0_weight,
+         day_of_tx = as.numeric(day_of_tx))
+
+fas_data = left_join(pup_data, litter_data, by = &quot;litter_number&quot;) 
+
+fas_data %&gt;% 
+  group_by(dose, day_of_tx) %&gt;% 
+  summarize(mean_pivot = mean(pd_pivot, na.rm = TRUE)) %&gt;% 
+  filter(!is.na(dose)) %&gt;% 
+  spread(key = dose, value = mean_pivot) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">day_of_tx</th>
+<th align="right">Con</th>
+<th align="right">Low</th>
+<th align="right">Mod</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">7.000</td>
+<td align="right">7.939</td>
+<td align="right">6.984</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">6.236</td>
+<td align="right">7.721</td>
+<td align="right">7.042</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
