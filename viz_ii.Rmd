@@ -88,7 +88,6 @@ ggplot(weather_df, aes(x = tmin, y = tmax)) +
   )
 ```
 
-
 ## Colors
 
 Adjust color
@@ -166,4 +165,15 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
   theme(legend.position = "bottom")
 ```
 
+## Arguments to `geom_*`
 
+```{r}
+centralpark_df = weather_df %>% filter(name == "CentralPark_NY")
+waikiki_df = weather_df %>% filter(name == "Waikiki_HA")
+
+ggplot(waikiki_df, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = centralpark_df)
+```
+
+## patchwork
