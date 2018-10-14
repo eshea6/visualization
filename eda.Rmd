@@ -167,4 +167,23 @@ weather_df %>%
   summarize(sd_one_day_change = sd(one_day_change, na.rm = TRUE))
 ```
 
+PULSE Learning Assessment:
+
+```{r}
+pulse_data = haven::read_sas("./data/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names() %>%
+  gather(key = visit, value = bdi, bdi_score_bl:bdi_score_12m) %>%
+  separate(visit, into = c("remove_1", "remove_2", "visit"), sep = "_") %>%
+  select(id, visit, everything(), -starts_with("remove")) %>%
+  mutate(visit = replace(visit, visit == "bl", "00m"),
+         visit = factor(visit, levels = str_c(c("00", "01", "06", "12"), "m"))) %>%
+  arrange(id, visit)
+
+pulse_data %>% 
+  group_by(visit) %>% 
+  summarize(mean_bdi = mean(bdi, na.rm = TRUE),
+            median_bdi = median(bdi, na.rm = TRUE)) %>% 
+  knitr::kable(digits = 3)
+```
+
 

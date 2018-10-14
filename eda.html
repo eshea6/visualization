@@ -315,12 +315,12 @@ $(document).ready(function () {
 
 
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 3.0.0     ✔ purrr   0.2.5
 ## ✔ tibble  1.4.2     ✔ dplyr   0.7.6
 ## ✔ tidyr   0.8.1     ✔ stringr 1.3.1
 ## ✔ readr   1.1.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>knitr::opts_chunk$set(
@@ -677,6 +677,53 @@ ggplot(weather_df, aes(x = date, y = tmax, color = name)) +
 ## 1 CentralPark_NY              4.45
 ## 2 Waikiki_HA                  1.23
 ## 3 Waterhole_WA                3.13</code></pre>
+<p>PULSE Learning Assessment:</p>
+<pre class="r"><code>pulse_data = haven::read_sas(&quot;./data/public_pulse_data.sas7bdat&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  gather(key = visit, value = bdi, bdi_score_bl:bdi_score_12m) %&gt;%
+  separate(visit, into = c(&quot;remove_1&quot;, &quot;remove_2&quot;, &quot;visit&quot;), sep = &quot;_&quot;) %&gt;%
+  select(id, visit, everything(), -starts_with(&quot;remove&quot;)) %&gt;%
+  mutate(visit = replace(visit, visit == &quot;bl&quot;, &quot;00m&quot;),
+         visit = factor(visit, levels = str_c(c(&quot;00&quot;, &quot;01&quot;, &quot;06&quot;, &quot;12&quot;), &quot;m&quot;))) %&gt;%
+  arrange(id, visit)</code></pre>
+<pre><code>## Warning: attributes are not identical across measure variables;
+## they will be dropped</code></pre>
+<pre class="r"><code>pulse_data %&gt;% 
+  group_by(visit) %&gt;% 
+  summarize(mean_bdi = mean(bdi, na.rm = TRUE),
+            median_bdi = median(bdi, na.rm = TRUE)) %&gt;% 
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">visit</th>
+<th align="right">mean_bdi</th>
+<th align="right">median_bdi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">00m</td>
+<td align="right">7.995</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">01m</td>
+<td align="right">6.046</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">06m</td>
+<td align="right">5.672</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">12m</td>
+<td align="right">6.097</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
