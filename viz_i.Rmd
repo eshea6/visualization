@@ -126,13 +126,93 @@ weather_df %>%
     geom_smooth(method = "lm", se = FALSE)
 ```
 
+These two lines of code will result in different plots!
+
+```{r}
+ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin), color = "blue")
+ggplot(weather_df) + geom_point(aes(x = tmax, y = tmin, color = "blue"))
+```
+
 
 ## Univariate plots
 
+Histograms!!
+
+```{r}
+ggplot(weather_df, aes(x = tmax)) +
+  geom_histogram()
+```
+
+```{r}
+ggplot(weather_df, aes(x = tmax, fill = name)) +
+  geom_histogram()
+```
 
 
+Density plots!!
+
+```{r}
+ggplot(weather_df, aes(x = tmax, fill = name)) +
+  geom_density(alpha = 0.5)
+```
+
+Boxplots!!
+
+```{r}
+ggplot(weather_df, aes(x = name, y = tmax)) +
+  geom_boxplot()
+```
+
+Violin plots!!
+
+```{r}
+ggplot(weather_df, aes(x = name, y = tmax)) +
+  geom_violin()
+```
+
+Ridge plots!!
+
+```{r}
+ggplot(weather_df, aes(x = tmax, y = name)) +
+  geom_density_ridges()
+```
+
+Learning assessment:
+
+```{r}
+ggplot(weather_df, aes(x = prcp)) +
+  geom_histogram() +
+  facet_grid(~name)
+
+ggplot(weather_df, aes(x = prcp)) +
+  geom_density(aes(fill = name), alpha = 0.5)
+
+ggplot(weather_df, aes(y = prcp, x = name )) +
+  geom_boxplot()
+
+ggplot(weather_df, aes(y = prcp, x = name)) +
+  geom_violin()
+
+ggplot(weather_df, aes(x = prcp, y = name)) +
+  geom_density_ridges()
+```
+
+```{r}
+weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, y = name)) + 
+  geom_density_ridges(scale = .85)
+```
 
 
+## Saving plots
+
+```{r}
+weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .5) 
+
+ggsave("weather_plot.pdf", weather_plot, width = 8, height = 5)
+```
 
 
 
